@@ -63,7 +63,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     println!("현재 URL: {}", current_url);
 
     if !current_url.contains("/member/login") {
-        println!("로그인 성공! 자동화 계속 진행합니다 🎉");
+        println!("로그인에 성공하였습니다");
     } else {
         println!("로그인 실패... 수동으로 로그인 후 엔터 눌러주세요.");
         let mut _input2 = String::new();
@@ -236,15 +236,15 @@ async fn main() -> Result<(), Box<dyn Error>> {
                 if let Ok(checkbox) = driver.query(By::Css("input[type='checkbox'][name*='license'], input[type='checkbox'][id*='license'], input[type='checkbox']")).first().await {
                     match checkbox.is_selected().await {
                         Ok(true) => {
-                            println!("✅ 체크박스가 이미 체크되어 있음 → 클릭 스킵!");
+                            println!("체크박스가 이미 체크되어 있음 → 클릭 스킵!");
                             break;
                         }
                         Ok(false) => {
-                            println!("🔲 체크박스가 체크 안 되어 있음 → 클릭 시도!");
+                            println!("체크박스가 체크 안 되어 있음 → 클릭 시도!");
                             if checkbox.click().await.is_err() {
                                 let _ = driver.execute("arguments[0].click();", vec![checkbox.to_json()?]).await;
                             }
-                            println!("✅ 동의 체크박스 클릭 완료!");
+                            println!("동의 체크박스 클릭 완료!");
                             break;
                         }
                         Err(_) => {

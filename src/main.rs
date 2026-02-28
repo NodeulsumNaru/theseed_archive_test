@@ -172,6 +172,24 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
         // ==================== 4. 알림창 처리 및 편집/저장 ====================
         if !replace_map.is_empty() {
+            // ==================== 토론 발생 여부 확인 ====================
+    println!("편집 전에 사용자 문서에 진행 중인 토론이 있는지 확인중...");
+    let target_doc = "사용자:NodeulsumNaru"; // 목표 문서
+    let discuss_url = format!("https://theseed.io/discuss/{}", target_doc);
+    driver.goto(&discuss_url).await?;
+
+    // 더시드 엔진에서 토론 목록은 보통 table 안에 들어있습니다.
+    // '진행 중'인 토론이 있는지 찾기 위해 목록(tr)을 가져옵니다.
+    // (스킨이나 테마에 따라 CSS 선택자는 "table tbody tr" 등으로 다를 수 있습니다.)
+    if let Ok(threads) = driver.query(By::Css("table.table tbody tr")).all().await {
+        if !threads.is_empty() {
+            println!("🚨 사용자 문서에 활성화된 토론이 있어 즉시 정지합니다. 🚨");
+            driver.quit().await?;
+            return Ok(()); // 프로그램 정상 종료
+        }
+    } else {
+        println!("진행 중인 토론이 없습니다.");
+    }
             let edit_url = doc_url.replace("/w/", "/edit/");
             driver.goto(&edit_url).await?;
             tokio::time::sleep(Duration::from_secs(3)).await;

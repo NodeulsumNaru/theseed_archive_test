@@ -175,7 +175,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
             // ==================== 토론 발생 여부 확인 ====================
     println!("편집 전에 사용자 문서에 진행 중인 토론이 있는지 확인중...");
     let target_doc = "사용자:NodeulsumNaru"; // 목표 문서
-    let discuss_url = format!("https://theseed.io/discuss/{}", target_doc);
+    let discuss_url = format!("https://namu.wiki/discuss/{}", target_doc);
     driver.goto(&discuss_url).await?;
 
     // 더시드 엔진에서 토론 목록은 보통 table 안에 들어있습니다.
